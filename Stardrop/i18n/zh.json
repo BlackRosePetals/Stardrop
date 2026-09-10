@@ -72,9 +72,9 @@
   // Main Window - Hyperlinks
   "ui.main_window.hyperlinks.click_to_open": "点击打开",
   "ui.main_window.hyperlinks.view_changelog": "查看",
-  "ui.main_window.hyperlinks.update_available": "可用更新（{0}）",
-  "ui.main_window.hyperlinks.unofficial_update_available": "非官方可用更新（{0}）",
-  "ui.main_window.hyperlinks.update_ignored": "更新被忽略（{0}）",
+  "ui.main_window.hyperlinks.update_available": "可用更新 ({0})",
+  "ui.main_window.hyperlinks.unofficial_update_available": "非官方可用更新 ({0})",
+  "ui.main_window.hyperlinks.update_ignored": "更新被忽略 ({0})",
   "ui.main_window.hyperlinks.broken_compatibility_issue": "[已损坏] 兼容性问题",
   "ui.main_window.hyperlinks.install_update": "安装更新",
   "ui.main_window.hyperlinks.downloading": "正在下载...",
@@ -95,7 +95,7 @@
   "ui.main_window.button.update_status.failed": "模组更新检查失败",
 
   // Main Window - Buttons - Downloads
-  "ui.main_window.buttons.downloads.label": "下载（{0}）",
+  "ui.main_window.buttons.downloads.label": "下载 ({0})",
 
   // Main Window - ComboBox
   "ui.main_window.combobox.show_all_mods": "显示所有模组",
@@ -257,8 +257,8 @@
   // Messages
   "ui.message.confirm_mod_deletion": "您确定要删除{0}？此操作无法撤销！",
   "ui.message.unsaved_config_changes": "检测到配置方案{0}的模组配置更改未保存\n\n是否要保存更改？",
-  "ui.message.stardrop_update_available": "Stardrop 有可用更新（v{0}）\n\n是否要现在下载？",
-  "ui.message.SMAPI_update_available": "SMAPI 有可用更新（v{0}）\n\n是否要现在下载？",
+  "ui.message.stardrop_update_available": "Stardrop 有可用更新 (v{0})\n\n是否要现在下载？",
+  "ui.message.SMAPI_update_available": "SMAPI 有可用更新 (v{0})\n\n是否要现在下载？",
   "ui.message.stardrop_update_complete": "Stardrop 已成功更新\n\n是否要查看发布说明？",
   "ui.message.SMAPI_update_complete": "SMAPI 已成功更新\n\n是否要查看发布说明？",
   "ui.message.confirm_bulk_change_mod_states_enable": "启用 {0} 个模组？\n\n仅影响当前显示的模组。\n\n注意：此操作无法撤销",
@@ -336,7 +336,7 @@
   "ui.message.collection_finalizing": "正在完成合集{0}的安装...",
   "ui.message.collection_finalizing_configuration": "正在应用合集的模组配置...",
   "ui.message.collection_finalizing_profile": "正在构建合集的配置方案...",
-  "ui.message.collection_downloading": "正在下载{0}\n（{1}/{2}）",
+  "ui.message.collection_downloading": "正在下载{0}\n({1}/{2})",
   "ui.message.collection_download_size": "{0}/{1}",
   "ui.message.collection_install_summary": "合集{0}安装完成。\n\n已安装 {1}/{2} 个模组。",
   "ui.message.collection_install_cancelled": "已取消合集{0}的安装。\n\n已下载的内容已被清除，因此未安装任何文件。",
