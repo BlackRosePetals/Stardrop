@@ -602,6 +602,9 @@ namespace Stardrop.Views
 
             CollectionCache.Save(collection);
 
+            // The rescans above ran before a first install's record existed, which left its mods showing the source ID
+            _viewModel.RefreshCollectionNames();
+
             // An nxm collection link is the one thing not held back while this window is open, so a collection can
             // finish installing behind it. Without this the window keeps showing the list it read when it opened,
             // which is missing the collection the user has just watched install
