@@ -1145,8 +1145,8 @@ namespace Stardrop.Views
 
         /// <summary>
         /// Packs a bundled folder into an archive of its own, written alongside the collection's other downloads so
-        /// that the cleanup after installing removes it along with the rest. The folder is kept as the archive's
-        /// root rather than being flattened into it, since its name is what the mod ends up installed as.
+        /// that the cleanup after installing removes it along with the rest. Whether the folder's own name is kept
+        /// as the archive's root depends on its shape, as decided by <see cref="IsBundleContainer"/>.
         /// </summary>
         private static string? PackBundledFolder(DirectoryInfo folder)
         {
@@ -1159,8 +1159,14 @@ namespace Stardrop.Views
                 var archivePath = Path.Combine(downloadPath, $"{folder.Name}.zip");
                 TryDelete(archivePath);
 
+                var isContainer = IsBundleContainer(folder);
+                if (isContainer)
+                {
+                    Program.helper.Log($"Packing the contents of the bundled folder {folder.Name} without the folder itself, as it contains mod related data");
+                }
+
                 // Uncompressed, as this is read back and deleted within the same install
-                ZipFile.CreateFromDirectory(folder.FullName, archivePath, CompressionLevel.NoCompression, includeBaseDirectory: true);
+                ZipFile.CreateFromDirectory(folder.FullName, archivePath, CompressionLevel.NoCompression, includeBaseDirectory: isContainer is false);
 
                 return archivePath;
             }
@@ -1170,6 +1176,24 @@ namespace Stardrop.Views
 
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Whether a bundled folder only holds an entry's contents rather than being part of them.
+        ///
+        /// A folder with manifest.json directly inside is the mod itself, so its name is what the mod installs as.
+        /// Anything else with subfolders is laid out like a Mods folder (such as a config bundle holding ModName/config.json), 
+        /// where keeping the bundle's own name would place every file one level deeper than the mod it is meant for.
+        /// A folder of loose files keeps its name.
+        /// </summary>
+        private static bool IsBundleContainer(DirectoryInfo folder)
+        {
+            if (folder.EnumerateFiles().Any(f => f.Name.Equals("manifest.json", StringComparison.OrdinalIgnoreCase)))
+            {
+                return false;
+            }
+
+            return folder.EnumerateDirectories().Any();
         }
 
         private static string? FailBundledEntry(CollectionModEntry entry, string reasonKey)
