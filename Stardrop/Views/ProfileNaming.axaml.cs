@@ -50,7 +50,8 @@ namespace Stardrop.Views
                     _profileEditor.Profiles.Remove(_renameTarget);
                 }
 
-                addedProfile = new Profile(profileNameBox.Text, false, _renameTarget is null ? null : _renameTarget.EnabledModIds);
+                // A rename carries the whole profile across, where rebuilding it from the enabled mods alone lost its notes and preserved configs
+                addedProfile = _renameTarget is null ? new Profile(profileNameBox.Text) : _renameTarget.CopyWithName(profileNameBox.Text);
                 if (_profileEditor.IsProfileNameTaken(addedProfile.Name) is false)
                 {
                     _profileEditor.Profiles.Add(addedProfile);
