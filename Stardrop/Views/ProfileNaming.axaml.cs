@@ -51,7 +51,7 @@ namespace Stardrop.Views
                 }
 
                 addedProfile = new Profile(profileNameBox.Text, false, _renameTarget is null ? null : _renameTarget.EnabledModIds);
-                if (!_profileEditor.Profiles.Any(p => p.Name == addedProfile.Name))
+                if (_profileEditor.IsProfileNameTaken(addedProfile.Name) is false)
                 {
                     _profileEditor.Profiles.Add(addedProfile);
                 }

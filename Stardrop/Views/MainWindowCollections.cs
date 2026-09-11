@@ -1280,7 +1280,8 @@ namespace Stardrop.Views
             var candidate = baseName;
 
             int suffix = 2;
-            while (_editorView.Profiles.Any(p => p.Name.Equals(candidate, StringComparison.OrdinalIgnoreCase)))
+            // Compared on file name, so a name differing only in characters a file can't hold still gets its own suffix
+            while (_editorView.IsProfileNameTaken(candidate))
             {
                 candidate = $"{baseName} [{suffix}]";
                 suffix++;
