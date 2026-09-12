@@ -583,7 +583,7 @@ namespace Stardrop.Views
 
         private async void _lockSentinelTimer_Tick(object? sender, EventArgs e)
         {
-            if (_lockWindow is not null || this.OwnedWindows.Any(w => w is WarningWindow) || _viewModel.IsLocked is false || String.IsNullOrEmpty(_lockReason))
+            if (_lockWindow is not null || HasOpenDialog() || _viewModel.IsLocked is false || String.IsNullOrEmpty(_lockReason))
             {
                 return;
             }
@@ -2302,7 +2302,37 @@ namespace Stardrop.Views
         /// </summary>
         private void KeepDialogAboveSiblings(Window dialog)
         {
-            dialog.Topmost = this.OwnedWindows.Any(w => ReferenceEquals(w, dialog) is false);
+            dialog.Topmost = OwnedWindows.Any(w => ReferenceEquals(w, dialog) is false);
+        }
+
+        private bool HasOpenDialog()
+        {
+            return OwnedWindows.Any(w => ReferenceEquals(w, _collectionsWindow) is false);
+        }
+
+        /// <summary>
+        /// Shows a dialog over the lock window.
+        /// </summary>
+        private async Task<T> ShowDialogOverLock<T>(Window dialog)
+        {
+            var lockWindow = _lockWindow;
+            if (lockWindow is not null)
+            {
+                lockWindow.Topmost = false;
+            }
+
+            try
+            {
+                return await dialog.ShowDialog<T>(this);
+            }
+            finally
+            {
+                // Only where it is still the current one, as SetLockState may have closed it while the dialog was open
+                if (lockWindow is not null && ReferenceEquals(_lockWindow, lockWindow))
+                {
+                    KeepDialogAboveSiblings(lockWindow);
+                }
+            }
         }
 
         /// <summary>
@@ -3094,7 +3124,7 @@ namespace Stardrop.Views
                         foreach (var manifest in pathToManifests.Values.Where(m => m is not null && _viewModel.HasModInstalled(m.UniqueID) is true && string.IsNullOrEmpty(m.UpdateCautionMessage) is false))
                         {
                             var requestWindow = new MessageWindow(String.Format(Program.translation.Get("ui.message.confirm_mod_update_caution"), manifest!.Name, manifest!.UpdateCautionMessage)) { Topmost = true };
-                            if (await requestWindow.ShowDialog<bool>(this) is false)
+                            if (await ShowDialogOverLock<bool>(requestWindow) is false)
                             {
                                 Program.helper.Log($"User elected to skip mod update due to given Manifest.UpdateCautionMessage message for mod {manifest!.UniqueID}:{manifest!.UpdateCautionMessage}");
                                 shouldProceedWithUpdate = false;
@@ -3141,7 +3171,7 @@ namespace Stardrop.Views
                                         {
                                             Topmost = true
                                         };
-                                        Choice response = await requestWindow.ShowDialog<Choice>(this);
+                                        Choice response = await ShowDialogOverLock<Choice>(requestWindow);
                                         if (response == Choice.First || response == Choice.Second)
                                         {
                                             if (response == Choice.Second)
